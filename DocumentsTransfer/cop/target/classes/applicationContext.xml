@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<bean id="sampleJob" class="com.mobilitie.schedulers.COPTransferJob" />
+
+	<bean id="sampleJobBean"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sampleJob" />
+		<property name="targetMethod" value="sampleJobMethod" />
+	</bean>
+
+	<bean id="sampleJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="sampleJobBean" />
+		<property name="repeatInterval" value="900000" />
+		<property name="startDelay" value="3000" />
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="sampleJobBean" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="sampleJobTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>
